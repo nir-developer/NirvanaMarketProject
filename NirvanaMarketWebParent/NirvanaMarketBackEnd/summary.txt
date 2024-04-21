@@ -1,0 +1,48 @@
+
+KEY NOTES: 
+
+	1.Must have both jpa and mysql in Common project 
+			
+	2.Must import the Common module from the WebParent ! 
+  		 So the BackEnd can use the Entites defined there! 
+  		 
+  	3.Must Set the EntityScan on the backend - since package names of the Common and Backend are different! 
+  	 Set the Main class of the Backend as:
+  	 
+	  	@SpringBootApplication
+		@EntityScan({"com.nirvanamarket.common.entity", "com.nirvanamarket.admin.user"})
+		public class NirvanaMarketBackEndProjectApplication {
+	  	 	
+	  	
+	  	 ==> THE FIRST PACKAGE IS FROM THE COMMON PROJECT!! 
+  	 
+  	 	
+  
+  		
+  		
+  ------------------------------
+TASK LIST: 
+
+	0.Updatet the WebParent - add the depenedcy to COmmon project : 
+		
+			<dependency>
+				<groupId>com.nirvanamarket</groupId>
+				<artifactId>NirvanaMarketCommon</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			
+			
+			
+			
+	1.Update the Common project Create the Entities (CHECK IT HAS THE JPA ) 
+		(id, name(unqiue),description) 
+		
+	2.Update the Backend : 
+		Create the package user 
+		Create the Interface RoleRepository
+	
+		
+	3.Backend - Create Unit Test 
+		
+	
+	
