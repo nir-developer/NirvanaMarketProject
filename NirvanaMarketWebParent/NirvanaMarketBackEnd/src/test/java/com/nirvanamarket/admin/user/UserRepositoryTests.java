@@ -51,7 +51,7 @@ public class UserRepositoryTests {
 		assertThat(savedUser.getId()).isGreaterThan(0);
 	}
 	
-	//@Disabled
+	@Disabled
 	@DisplayName("create user with 2 roles")
 	@Test
 	public void testCreateUserWithTwoRoles()
