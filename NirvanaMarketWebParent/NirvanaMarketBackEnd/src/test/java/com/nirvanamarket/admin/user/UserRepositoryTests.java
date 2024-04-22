@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -50,7 +51,8 @@ public class UserRepositoryTests {
 		assertThat(savedUser.getId()).isGreaterThan(0);
 	}
 	
-	@Disabled
+	//@Disabled
+	@DisplayName("create user with 2 roles")
 	@Test
 	public void testCreateUserWithTwoRoles()
 	{
@@ -71,6 +73,7 @@ public class UserRepositoryTests {
 		
 	}
 	
+	//User [id=1, email=niritzhak@gmail.com, password=superduper100, firstName=Nir, lastName=Itzhak, photos=null, enabled=false, roles=[Role [id=1, name=Admin, description=manage everything]]]
 	@Test
 	@Disabled
 	void testListAllUsers()
