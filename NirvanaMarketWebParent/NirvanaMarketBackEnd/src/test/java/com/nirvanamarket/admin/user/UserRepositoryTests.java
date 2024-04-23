@@ -190,5 +190,30 @@ public class UserRepositoryTests {
 //		
 		
 	}
+	
+	
+	@Test
+	void testGetUserByEmailWhenNotFoundShouldReturnNull()
+	{
+		String email = "abc@def"; 
+		
+		User user = this.repository.getUseByEmail(email);
+		
+		assertThat(user).isNull();
+		
+		System.out.println(user);
+	}
+	
+	@Test
+	void testGetUserByEmailWhenFoundShouldReturnNotNull()
+	{
+		String email = "niritzhak@gmail.com"; 
+		
+		User user = this.repository.getUseByEmail(email);
+			
+		assertThat(user).isNotNull();
+		
+		System.out.println(user);
+	}
 
 }

@@ -27,14 +27,21 @@ public class UserService {
 	public List<Role> listRoles() 
 	{
 		return (List<Role>)this.roleRepository.findAll();
-		
 	}
-
 
 	public void save(User user) {
 		
 		this.userRepository.save(user);
 		
+	}
+	
+	
+	public boolean isEmailUnique(String email)
+	{
+		User userByEmail = this.userRepository.getUseByEmail(email);
+		System.out.println("SERVICE - the user: " + userByEmail);
+		//email unqiue <-> userByEmail == null 
+		return userByEmail == null; 
 	}
 	
 	

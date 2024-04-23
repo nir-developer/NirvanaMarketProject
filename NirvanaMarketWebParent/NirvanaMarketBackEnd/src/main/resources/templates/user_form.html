@@ -89,7 +89,8 @@
 		<h2>Manage Users | Create New User</h2>
 	</div>
 	
-	<form th:object="${user}" th:action="@{/users/save}" method="post" style="max-width: 700px; margin: 0 auto">
+	<form  th:action="@{/users/save}" method="post" style="max-width: 700px; margin: 0 auto" id="signup"
+		th:object="${user}" onsubmit="return checkEmailUnique(this);" >
 	<div class="border border-secondary rounded p-3">
 	
 		<div class="form-group row">
@@ -146,13 +147,33 @@
 		
 		
 		
-	<div class="text-center">
-		<input type="submit" value="Save" class="btn btn-primary m-3">
-		<input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel">
-	
-	</div>
-	</div>
+		<div class="text-center">
+			<input type="submit" value="Save" class="btn btn-primary m-3">
+			<input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel">
+		
+		</div>
+	  </div>
 	</form>
+	
+	<!-- BOOTSTRAP MODAL -->
+	<div class="modal fade text-center" id="modalDialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<!-- ID SINCE THE TITLE CAN BE UPDATED IN JS -->
+					<h4 class="modal-title" id="modalTitle">Warning</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<!-- ID SINCE THE BODY CAN BE UPDATED IN JS -->
+					<span id="modalBody"></span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 	
 	<div class="text-center">
@@ -172,10 +193,65 @@ const buttonCancelEl = document.getElementById("buttonCancel");
 	$(document).ready(function(){
 		$("#buttonCancel").on("click", function(){
 			window.location = "[[@{/users}]]"
-		})
-	})
+		});
+	});
 
 	
+	function checkEmailUnique(form)
+	{
+		const url = "[[@{/users/check_email}]]"
+	
+		//READ THE EMAIL AND THE _csrf  FROM THE FORM INPUTS(name attributes)
+		//(_csrf has been generated automatically by SS)
+		const userEmail = $("#email").val();
+		const csrfValue = $("input[name='_csrf']").val();
+		
+		const params = {email:userEmail, _csrf: csrfValue}
+		
+		//TEST MODAL DIALOG  - OK!!
+		/* $("#modalDialog").modal(); */
+		
+		//MAKE THE POST AJAX CALL TO THE RESTFULL WEB SERVICE)
+		$.post(url, params, function(response){
+			
+			console.log(`response from the server: ${response}`)
+			
+			//ENABLE FORM SUBMISSION IF RESPONSE IS OK - BY MANUALLY SUBMIT
+			if(response === "OK") form.submit(); 
+			
+			else if(response === "Duplicated") showModalDialog("Warning", "There is another user having this email " + userEmail); 
+			
+			else showModalDialog("Error", "Unkown response from server"); 
+
+			
+		})
+		//IN CASE CONNECTION ERROR (LIKE FETCH REJECTS THE PROMISE IN THIS CASE)
+		//CAN BE TESTED BY CHANGING THE URL OF THE API TO users/check_email22223
+		.fail(function(){
+			showModalDialog("Error", "Could not connect to the server"); 
+		})
+		
+		//PREVENT AUTO FORM SUBMISSION!
+		return false;
+	
+	}
+	
+	
+	//GENERIF FUNCTION FOR DISPLAYING THE DIALOG 
+	function showModalDialog(title, message) 
+	{
+		$("#modalTitle").text(title);
+		$("#modalBody").text(message); 
+		$("#modalDialog").modal();
+		
+	}
+	
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//MY JS CODE 
+////////////////////////////////////////////////
+
 //MY JS CODE - CANCEL BUTTON -OK!
 /* const cancelHandler = e => {
 	e.preventDefault();
