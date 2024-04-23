@@ -4,3 +4,16 @@
 	height: auto;
 	
 }
+
+/*NAM*/
+
+*.icon-white {color: white}
+*.icon-silver {color: silver}
+*.icon-green {color: green}
+*.icon-dark {color: gray}
+/*MUST ADD SPACE BETWEEN SELECTO AND IT'S VALUE - BELOW WILL NOT WORK!!!*/
+/* *.icon-white{color:white};
+*.icon-silver{color:silver};
+*.icon-green{color:green};
+*.icon-dark{color:gray} */
+
