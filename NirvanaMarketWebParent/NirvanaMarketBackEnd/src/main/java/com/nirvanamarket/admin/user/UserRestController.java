@@ -15,12 +15,12 @@ public class UserRestController {
 	//For simplicity - return String - not JSON
 	//THE URL WILL BE CALLED BY AJAX POST REQUEST WHEN SUBMITTING THE 
 	//SIGNUP FORM BY CLICKING THE Save button (input type="submit")
+	//
 	@PostMapping("/users/check_email")
-	public String checkDuplicateEmail(String email)
+	public String checkDuplicateEmail(@Param("id") Integer id, @Param("email") String email)
 	{
-		boolean isUnique = this.service.isEmailUnique(email);
-		System.out.println("CONTROLLER - THE USER IS UNIQUE ? " + isUnique); 
-		return this.service.isEmailUnique(email) ? "OK":"Duplicated";
+		
+		return this.service.isEmailUnique(id, email) ? "OK":"Duplicated";
 	}
 
 }

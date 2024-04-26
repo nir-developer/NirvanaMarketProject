@@ -1,8 +1,10 @@
 package com.nirvanamarket.admin.user;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.nirvanamarket.common.entity.Role;
@@ -17,6 +19,14 @@ public class UserService {
 	
 	@Autowired
 	private RoleRepository roleRepository;
+	
+	
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	
+	
 	public List<User> listAll() 
 	{
 		return (List<User>) this.userRepository.findAll();
@@ -31,18 +41,97 @@ public class UserService {
 
 	public void save(User user) {
 		
+		boolean isUpdatingUser = (user.getId() != null); 
+		
+		//UPDATING MODE
+		if(isUpdatingUser)
+		{
+			
+			//1) GET THE USER FROM DB BY ID
+			User existingUser = this.userRepository.findById(user.getId()).get();
+				
+			//2)IF THE PASSWORD ON THE FORM IS EMPTY - DONT UPDATE THE PASSWORD OF THE DB USER (THE ADMIN WANTS TO KEEP THE USER PASSWORD
+			//INSTEAD - UPDATE THE PASSWORD OF THE USER FROM THE FORM -TO THE PASSWORD OF THE EXISTED USER
+			if(user.getPassword().isEmpty())
+			{
+				user.setPassword(existingUser.getPassword());
+			}
+			
+			//3)password of the user in the form is not empty 
+			//- then encode the user password form the form 
+			//
+			else
+			{
+				encodePassword(user);
+				System.err.println(user.getPassword()); 
+				//existingUser.setPassword(user.getPassword());
+			}
+		}
+		//NEW MODE - JUST ENCODE THE PASSWORD OF T
+		else
+		{
+			encodePassword(user);
+			System.err.println(user.getPassword()); 
+			
+			
+		}
+		
+		//PERIST THE USER IN THE FORM TO DB TO DB!
 		this.userRepository.save(user);
 		
 	}
 	
 	
-	public boolean isEmailUnique(String email)
-	{
-		User userByEmail = this.userRepository.getUseByEmail(email);
-		System.out.println("SERVICE - the user: " + userByEmail);
-		//email unqiue <-> userByEmail == null 
-		return userByEmail == null; 
+	private void encodePassword(User user) {
+		String encodedPassword = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encodedPassword);
 	}
 	
+	public boolean isEmailUnique(Integer id, String email)
+	{
+		User userByEmail = this.userRepository.getUseByEmail(email);
+		
+		//CASE 1: No user with the given email exists in DB - return true - good for edit & new 
+		if(userByEmail == null) return true; 
+		
+		//(*)HERE I KNOW THERE IS NO USER WITH THE GIVEN EMAIL!! 
+		
+		boolean isCreatingNew = (id == null); 
+		
+		
+		//Creating mode!
+		if(isCreatingNew)
+		{
+			//(*)WHY DO I NEED TO CHECK THIS?? - CHECK WITHOUT THIS IF! JUST SEND FALSE!
+			if(userByEmail != null) return false;
+		}
+		//Updating mode!
+		else
+		{
+			if(userByEmail.getId() != id)
+			{
+				return false; 
+			}
+			
+		}
+		
+		return true; 
+		
+	}
+	
+	
+	public User get(Integer id) throws UserNotFoundException
+	{
+		
+		try
+		{
+			return this.userRepository.findById(id).get();
+			
+		}
+		catch(NoSuchElementException ex)
+		{
+			throw new UserNotFoundException("Could not find any user with ID: " + id);
+		}
+	}
 	
 }
