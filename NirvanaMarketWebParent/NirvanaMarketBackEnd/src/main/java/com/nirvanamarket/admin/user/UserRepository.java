@@ -12,4 +12,8 @@ public interface UserRepository extends CrudRepository<User,Integer > {
 
 	@Query("SELECT u FROM User u WHERE u.email = :email")
 	public User getUseByEmail(@Param("email") String email);
+	
+	
+	//TO REDUCE RESULT SET SIZE RETUREND BY THE QUERY (getUserById() returns full user record from db
+	public Long countById(Integer id);
 }

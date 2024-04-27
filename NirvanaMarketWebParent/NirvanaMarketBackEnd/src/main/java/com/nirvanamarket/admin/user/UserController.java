@@ -78,21 +78,39 @@ public class UserController {
 			model.addAttribute("user", user);
 		
 			
-			
 			return "user_form"; 
 			
 		}
 		catch(UserNotFoundException ex)
 		{
-			System.err.println("NOT FOUND"); 
-			System.err.println(ex.getMessage());
+			
 			redirectAttributes.addFlashAttribute("message", ex.getMessage());
-//			return "users"; 
-			//REDIRECT!!
+
 			return "redirect:/users"; 
 		}
 	}
 	
+	@GetMapping("/users/delete/{id}")
+	public String deleteUser(@PathVariable (name = "id") Integer id, Model model, RedirectAttributes redirectAttributes)
+	{
+		try 
+		{
+			this.service.delete(id);
+			
+			redirectAttributes.addFlashAttribute("message", 
+					"The user ID " + id + " has been deleted successfully"); 
+			
+		}
+		catch(UserNotFoundException ex)
+		{
+			
+			redirectAttributes.addFlashAttribute("message", ex.getMessage());
+
+			//return "redirect:/users"; 
+		}
+		
+		return "redirect:/users";
+	}
 	
 
 }

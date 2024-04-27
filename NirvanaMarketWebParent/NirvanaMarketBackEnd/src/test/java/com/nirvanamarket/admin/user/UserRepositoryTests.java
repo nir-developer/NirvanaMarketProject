@@ -215,5 +215,30 @@ public class UserRepositoryTests {
 		
 		System.out.println(user);
 	}
+	
+	//OK
+	@Test
+	void testCountByIdWhenUserNotFoundShouldReturnNull()
+	{
+		Integer id = 100; 
+		//Long expected = 0l;
+		
+		Long actual = this.repository.countById(id);
+		
+		assertThat(actual).isNotNull().isEqualTo(0l);
+	}
+	
+	//OK!
+	@Test
+	void testCountByIdWhenUserFoundShouldReturnOne()
+	{
+		Integer id = 1; 
+		
+		
+		Long actual = this.repository.countById(id);
+		
+		assertThat(actual).isNotNull().isGreaterThan(0).isEqualTo(1);
+	}
+
 
 }

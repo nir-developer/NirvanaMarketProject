@@ -120,6 +120,7 @@ public class UserService {
 	}
 	
 	
+	//THE JPA REPO MAY THROW! -> I need to handle it here!
 	public User get(Integer id) throws UserNotFoundException
 	{
 		
@@ -132,6 +133,22 @@ public class UserService {
 		{
 			throw new UserNotFoundException("Could not find any user with ID: " + id);
 		}
+	}
+	
+	//THE JPA REPO DOES NOT THROW! -> I need THROW - AND NOT HANDLE IT!
+	//IMPORTANT: FOR PERFORMANCE - FOR OLN CHECK EXISTENCE OF USER : -call  my countById() method -instead of the JPA findById() !
+	public void delete(Integer id) throws UserNotFoundException
+	{
+		
+		Long countById = this.userRepository.countById(id);
+		
+		if(countById == null || countById == 0)
+		{
+			throw new UserNotFoundException("Could not find any user with ID: " + id);
+
+		}
+		
+		this.userRepository.deleteById(id);
 	}
 	
 }
