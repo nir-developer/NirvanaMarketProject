@@ -240,5 +240,32 @@ public class UserRepositoryTests {
 		assertThat(actual).isNotNull().isGreaterThan(0).isEqualTo(1);
 	}
 
+	
+	//OK!
+	@Test
+	void testUpdateEnabledStatusFromDisabledToEnabled()
+	{
+		//GET THE USER FROM
+		Integer id = 1; 
+		
+		//WHEN
+		this.repository.updateEnabledStatus(id, true);
+		
+	
+	}
+	
+	//OK!
+		@Test
+		void testUpdateEnabledStatusFromEnabledToDisabled()
+		{
+			//GET THE USER FROM
+			Integer id = 1; 
+			
+			//WHEN
+			this.repository.updateEnabledStatus(id, false);
+			
+		
+		}
+
 
 }
