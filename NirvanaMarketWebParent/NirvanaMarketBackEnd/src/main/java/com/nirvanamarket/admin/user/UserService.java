@@ -42,7 +42,7 @@ public class UserService {
 		return (List<Role>)this.roleRepository.findAll();
 	}
 
-	public void save(User user) {
+	public User save(User user) {
 		
 		boolean isUpdatingUser = (user.getId() != null); 
 		
@@ -80,7 +80,7 @@ public class UserService {
 		}
 		
 		//PERIST THE USER IN THE FORM TO DB TO DB!
-		this.userRepository.save(user);
+		return this.userRepository.save(user);
 		
 	}
 	

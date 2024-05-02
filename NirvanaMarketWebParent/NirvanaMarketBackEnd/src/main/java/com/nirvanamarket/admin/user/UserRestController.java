@@ -19,7 +19,7 @@ public class UserRestController {
 	@PostMapping("/users/check_email")
 	public String checkDuplicateEmail(@Param("id") Integer id, @Param("email") String email)
 	{
-		
+		//System.err.println("IN REST CONTROLLER -- checkDuplicateEmail - id: " + id + " email: "  +email); 
 		return this.service.isEmailUnique(id, email) ? "OK":"Duplicated";
 	}
 
